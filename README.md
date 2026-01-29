@@ -1,8 +1,8 @@
-# PSFree_Docker
+# PSFree Web Host - Docker Deployment
 
-PSFree is a lightweight local web server for hosting the PSFree exploit
+This is a lightweight local web server for hosting the PSFree exploit
 
-This repo is a direct fork of Nasky's repo, plus below mods:
+This repo is a fork of Nasky's repo plus tweaks (mentioned below)
 
 - [PSFree from Nazky](https://github.com/Nazky/PSFree)
 
@@ -14,6 +14,16 @@ Nazky's repo is in turn based on the work of two other repos:
 <h1 style="color:red;text-align:center;">⚠️DON'T REPORT ERRORS FROM THIS REPO UPSTREAM⚠️</h1>
 
 ---
+
+### Tweaks
+
+- web host drops extra path and document text from URL - just hit the host and it's automatic
+- updates to allow running default http port 80
+- automatic build action pushes container to Docker hub
+- build versioning for repo and docker container
+- docker compose with instructions and exmaple defaults
+- Unraid template for manual installation and deployment to Unraid Community Apps
+- Unraid Docker 'app' icon
 
 ### Known issues
 
