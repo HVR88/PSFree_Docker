@@ -28,28 +28,23 @@ PS4 9.0 - 9.6 (maybe others but I will only test on 9)
 
 # How to run
 
-Deploy with docker-compose or on Unraid
-Your Docker host ideally supports macvlan or IPVLAN networking
+Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should ideally support macvlan or IPVLAN networking
 
-Docker Settings:
-• set br0 (or your macvlan) network mode
-• set Fixed IP address within your lan
-• set HTTP port to 80
+#### **Container Settings:**
 
-This allows a simple redirect without a reverse proxy
-Set the original "manuals.playstation.net" to point to your PSFree IP
+1. select/set your macvlan network (br0 on Unraid)
+2. set an available FIXED IP address within your lan
+3. set HTTP port to 80
 
-• AdGuard Home / Pi-hole: DNS rewrite → container IP
-• Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override (https://shorturl.at/Syx8T)
+<br>This allows a simple redirect without a reverse proxy
 
-Then, on PS4, open Settings → User Guide and the exploit loads automatically
+#### **Additional Setup:**
 
-Enjoy.
+Set the original "manuals.playstation.net" domain name to point to your container's IP address
 
-## Locally
+- AdGuard Home / Pi-hole: DNS rewrite → container IP
+- Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override<br>([Host redirect on common routers](https://shorturl.at/Syx8T))
 
-Not tested nor supported on my fork - look at upstream only for that.
+#### **On your PS4:**
 
-##### Windows:
-
-Forget about it, run a Linux server to hosty this: Unraid
+Go to Settings → User Guide and the exploit loads automatically → Enjoy!
