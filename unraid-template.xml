@@ -2,18 +2,20 @@
   <Name>PSFree</Name>
 
   <Overview>
-PSFree is a lightweight local HTTP server for hosting the PSFree PlayStation 4 jailbreak web interface.
+PSFree is a lightweight local HTTP server for hosting the PSFree exploit
 
 Best practice:
-• Run in br0 network mode with its own IP address
-• Bind the container to port 80 on that IP
+• Run with br0 network mode and its own dedicated IP address
+• Set the Web UI port below to 80
 
-This allows simple DNS redirects without a reverse proxy.
+This allows simple redirects without a reverse proxy.
 
-Typical redirect:
-manuals.playstation.net → container IP
+Redirecting manuals.playstation.net:
+• AdGuard Home / Pi-hole: DNS rewrite → container IP
+• Firewalls (pfSense / OPNsense): DNS override
 
-On PS4, opening the User Guide loads the exploit automatically.
+Then, on PS4, open User Guide and the exploit loads automatically.
+
   </Overview>
 
   <Registry>espressomatic/psfree_docker</Registry>
@@ -35,3 +37,4 @@ On PS4, opening the User Guide loads the exploit automatically.
     <Description>HTTP port exposed by the container (sets PORT env)</Description>
   </Config>
 </Container>
+
