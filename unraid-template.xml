@@ -1,0 +1,37 @@
+<Config>
+  <Name>PSFree</Name>
+  <Repository>espressomatic/PSFree_Docker:latest</Repository>
+  <Registry>https://hub.docker.com/r/espressomatic/PSFree_Docker</Registry>
+
+  <WebUI>http://[IP]:[PORT]/</WebUI>
+  <Icon>https://raw.githubusercontent.com/HVR88/PSFree_Docker/main/icon.png</Icon>
+  <Description>PSFree is a lightweight local HTTP server for hosting the PSFree PlayStation 4 jailbreak web interface.
+
+This container runs a self-contained Python web server and exposes a configurable Web UI port.
+For best compatibility with consoles, HTTP is used (no HTTPS).
+
+Best practice:
+• Run in br0 network mode with its own IP address
+• Set the Web UI port to 80 on that IP
+
+This allows simple redirects without a reverse proxy.
+
+Redirecting clients:
+• PiHole or AdGuard Home: create a DNS rewrite (e.g. manuals.playstation.net → container IP)
+• Typical firewalls (pfSense / OPNSense): use DNS override or simple NAT redirect
+
+Redirect manuals.playstation.net to this container's IP (host: manuals, domain: playstation.net)
+
+On PS4, just visit the User Guide and that's it.
+
+No additional configuration is required after deployment.</Description>
+
+  <Variable>
+    <Name>PORT</Name>
+    <Key>PORT</Key>
+    <Value>52721</Value>
+    <Description>Web UI Port</Description>
+    <Type>Port</Type>
+    <Display>always</Display>
+  </Variable>
+</Config>
