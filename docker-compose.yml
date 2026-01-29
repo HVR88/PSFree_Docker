@@ -1,0 +1,10 @@
+services:
+  psfree:
+    build: .
+    container_name: psfree
+    ports:
+      - "52721:52721"
+    restart: unless-stopped
+    # Optional: persist generated/modified files (manifest, etc.)
+    volumes:
+      - ./data:/PSFree
