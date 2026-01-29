@@ -28,4 +28,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            espressomatic/psfree-server:latest
+            espressomatic/PSFree_Docker:latest
