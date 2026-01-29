@@ -2,7 +2,9 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: ["develop"]
+    branches:
+      - main
+      - develop
   workflow_dispatch:
 
 jobs:
@@ -28,4 +30,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            espressomatic/PSFree_Docker:latest
+            espressomatic/psfree_docker:${{ github.ref_name == 'main' && 'latest' || 'develop' }}
