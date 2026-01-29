@@ -6,6 +6,7 @@ services:
     # Internal container listen port.
     # IMPORTANT (bridge mode):
     #   This MUST match the *container-side* port used in `ports:` below.
+    #   Example (default for bridge) ports: "52721:80" -> PORT must be 80
     #   Example: ports: "8080:80"  -> PORT must be 80
     #   Example: ports: "52721:52721" -> PORT must be 52721
     #
@@ -30,7 +31,7 @@ services:
     #   - "52721:52721"  => browse http://HOST:52721/  (PSFree default port)
     #
     # ports:
-    #   - "8080:80"
+    #   - "52721:80"
 
     restart: unless-stopped
 

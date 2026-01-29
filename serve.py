@@ -43,6 +43,7 @@ EXCLUDED_FILES = {
     "COPYING",
     "LICENSE",
     "MAKEFILE",
+    "VERSION",
     "Dockerfile",
     "dockerfile",
 }
