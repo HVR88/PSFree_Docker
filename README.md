@@ -11,7 +11,9 @@ Nazky's repo is in turn based on the work of two other repos:
 - [PSFree from Kame repo](https://github.com/kmeps4/PSFree)
 - [PSFree from Al-Azif repo](https://github.com/Al-Azif/psfree-lapse)
 
-<h1 style="color:red;text-align:center;">⚠️DON'T REPORT ERRORS FROM THIS REPO UPSTREAM⚠️</h1>
+<h1 style="color:red;text-align:center;">⚠️ DON'T REPORT ERRORS FROM THIS REPO UPSTREAM</h1>
+
+## And don't report exploit errors here either.
 
 ---
 
