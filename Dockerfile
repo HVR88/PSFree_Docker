@@ -3,6 +3,9 @@ FROM --platform=linux/amd64 python:3.11-slim-bookworm
 # Work from PSFree directory (not /app)
 WORKDIR /PSFree
 
+# Run as root
+USER root
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
@@ -23,14 +26,10 @@ LABEL \
   net.unraid.docker.icon="https://raw.githubusercontent.com/HVR88/PSFree_Docker/main/icon.png" \
   net.unraid.docker.port="52721" \
   net.unraid.docker.webui="http://[IP]:[PORT]/" \
-  net.unraid.docker.description="PSFree local HTTP server for PS4 jailbreak" \
+  net.unraid.docker.description="PSFree local HTTP server for PS4 exploit" \
   org.opencontainers.image.title="PSFree" \
   org.opencontainers.image.description="PSFree local HTTP server for PS4 jailbreak" \
   org.opencontainers.image.source="https://github.com/HVR88/PSFree_Docker"
-
-
-# Run as root
-USER root
 
 # Default port
 ENV PORT=52721
