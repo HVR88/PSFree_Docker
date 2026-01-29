@@ -7,19 +7,20 @@
   <Project/>
   <Network>bridge</Network>
   <Overview>
-PSFree is a lightweight local HTTP server for hosting the PSFree exploit
+PSFree is a lightweight local web server for hosting the PSFree exploit
 
 Best practice:
-• Run with br0 network mode and its own dedicated IP address
-• Set the Web UI port below to 80
+• set br0 network mode
+• set Fixed IP address
+• set HTTP port to 80
 
-This allows simple redirects without a reverse proxy.
+This allows a simple redirect without a reverse proxy
+Set the original "manuals.playstation.net" to point to your PSFree IP
 
-Redirecting manuals.playstation.net:
 • AdGuard Home / Pi-hole: DNS rewrite → container IP
-• Firewalls (pfSense / OPNsense): DNS override
+• Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override (https://shorturl.at/Syx8T)
 
-Then, on PS4, open User Guide and the exploit loads automatically.
+Then, on PS4, open Settings → User Guide and the exploit loads automatically
 
   </Overview>
   <Category/>
@@ -32,6 +33,6 @@ Then, on PS4, open User Guide and the exploit loads automatically.
   <DonateText/>
   <DonateLink/>
   <Requires/>
-  <Config Name="PORT Override" Target="PORT" Default="80" Type="Variable" Display="always" Required="true" Mask="false" Description="HTTP port exposed by container (sets PORT env)" />
+  <Config Name="HTTP Port" Target="PORT" Default="80" Type="Variable" Display="always" Required="true" Mask="false" Description="HTTP port exposed by container (sets PORT env)" />
 </Container>
 
