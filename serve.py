@@ -19,6 +19,8 @@ console = Console()
 # Configuration for manifest generation
 EXCLUDED_DIRS = {".venv", ".git", "noneed"}
 EXCLUDED_EXTENSIONS = {
+    ".yml",
+    ".license",
     ".bat",
     ".txt",
     ".exe",
@@ -36,7 +38,14 @@ EXCLUDED_EXTENSIONS = {
     ".d",
 }
 # Drop non-web files
-EXCLUDED_FILES = {".gitignore", "COPYING", "LICENSE", "MAKEFILE", "dockerfile"}
+EXCLUDED_FILES = {
+    ".gitignore",
+    "COPYING",
+    "LICENSE",
+    "MAKEFILE",
+    "Dockerfile",
+    "dockerfile",
+}
 OUTPUT_FILE = "PSFree.manifest"
 
 
@@ -112,21 +121,53 @@ def create_manifest():
 class CustomHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        # Only redirect top-level HTML paths, never assets
-        if self.path.endswith(".html") and self.path not in ("/", "/index.html"):
+        # Normalize unwanted entry paths to `/` while never redirecting assets.
+        path_only = self.path.split("?", 1)[0].split("#", 1)[0]
+
+        # Always allow root.
+        if path_only in ("/", "/index.html"):
+            return super().do_GET()
+
+        # Allow directories (so /folder/ serves /folder/index.html if present).
+        if path_only.endswith("/"):
+            return super().do_GET()
+
+        # Allow any request that has a file extension (treat as an asset).
+        _, ext = os.path.splitext(path_only)
+        if ext:
+            return super().do_GET()
+
+        # Extensionless: if it doesn't map to a real file/dir, force to root.
+        fs_path = self.translate_path(path_only)
+        if not os.path.exists(fs_path):
             self.send_response(302)
             self.send_header("Location", "/")
             self.end_headers()
             return
-        super().do_GET()
+
+        return super().do_GET()
 
     def do_HEAD(self):
-        if self.path.endswith(".html") and self.path not in ("/", "/index.html"):
+        path_only = self.path.split("?", 1)[0].split("#", 1)[0]
+
+        if path_only in ("/", "/index.html"):
+            return super().do_HEAD()
+
+        if path_only.endswith("/"):
+            return super().do_HEAD()
+
+        _, ext = os.path.splitext(path_only)
+        if ext:
+            return super().do_HEAD()
+
+        fs_path = self.translate_path(path_only)
+        if not os.path.exists(fs_path):
             self.send_response(302)
             self.send_header("Location", "/")
             self.end_headers()
             return
-        super().do_HEAD()
+
+        return super().do_HEAD()
 
     def do_POST(self):
         if self.path == "/generate_manifest":
