@@ -2,18 +2,9 @@
 
 This is a lightweight local web server for hosting the PSFree exploit
 
-This repo is a fork of Nasky's repo plus tweaks (mentioned below)
+This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus tweaks (mentioned below)
 
-- [PSFree from Nazky](https://github.com/Nazky/PSFree)
-
-Nazky's repo is in turn based on the work of two other repos:
-
-- [PSFree from Kame repo](https://github.com/kmeps4/PSFree)
-- [PSFree from Al-Azif repo](https://github.com/Al-Azif/psfree-lapse)
-
-<h1 style="color:red;text-align:center;">⚠️ DON'T REPORT ERRORS FROM THIS REPO UPSTREAM</h1>
-
-## And don't report exploit errors here either.
+### Don't report any GoldHEN/exploit errors here
 
 ---
 
