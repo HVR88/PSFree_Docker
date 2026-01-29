@@ -1,6 +1,11 @@
-<Container>
+<?xml version="1.0"?>
+<Container version="2">
   <Name>PSFree</Name>
-
+  <Repository>espressomatic/psfree_docker:develop</Repository>
+  <Registry>https://hub.docker.com/r/espressomatic/psfree_docker:develop</Registry>
+  <Support/>
+  <Project/>
+  <Network>bridge</Network>
   <Overview>
 PSFree is a lightweight local HTTP server for hosting the PSFree exploit
 
@@ -17,24 +22,16 @@ Redirecting manuals.playstation.net:
 Then, on PS4, open User Guide and the exploit loads automatically.
 
   </Overview>
-
-  <Registry>espressomatic/psfree_docker</Registry>
-  <Repository>espressomatic/psfree_docker:develop</Repository>
-
+  <Category/>
+  <WebUI>http://[IP]:[PORT]/</WebUI>
+  <TemplateURL/>
   <Icon>https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/icon.png</Icon>
-
-  <Network>bridge</Network>
-
-  <Config
-    Name="Web Port"
-    Target="PORT"
-    Default="80"
-    Mode="tcp"
-    Type="Port"
-    Display="Always"
-    Required="true"
-    Mask="false">
-    <Description>HTTP port exposed by the container (sets PORT env)</Description>
-  </Config>
+  <ExtraParams/>
+  <PostArgs/>
+  <CPUset/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="PORT Override" Target="PORT" Default="80" Type="Variable" Display="always" Required="true" Mask="false" Description="HTTP port exposed by container (sets PORT env)" />
 </Container>
 
