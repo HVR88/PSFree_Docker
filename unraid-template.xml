@@ -25,13 +25,13 @@ On PS4, opening the User Guide loads the exploit automatically.
 
   <Config
     Name="Web Port"
-    Target="80"
+    Target="PORT"
     Default="80"
     Mode="tcp"
     Type="Port"
     Display="Always"
     Required="true"
     Mask="false">
-    <Description>Container Port: 80</Description>
+    <Description>HTTP port exposed by the container (sets PORT env)</Description>
   </Config>
 </Container>
