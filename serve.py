@@ -12,7 +12,9 @@ import hashlib
 import urllib.request
 import re
 
+
 console = Console()
+
 
 # Configuration for manifest generation
 EXCLUDED_DIRS = {".venv", ".git", "noneed"}
@@ -33,6 +35,7 @@ EXCLUDED_EXTENSIONS = {
     ".md",
     ".d",
 }
+# Drop non-web files
 EXCLUDED_FILES = {".gitignore", "COPYING", "LICENSE", "MAKEFILE", "dockerfile"}
 OUTPUT_FILE = "PSFree.manifest"
 
