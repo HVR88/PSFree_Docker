@@ -1,6 +1,6 @@
 # PSFree_Docker
 
-PSFree container for self-hosting and doing URL redirect
+PSFree is a lightweight local web server for hosting the PSFree exploit
 
 This repo is a direct fork of Nasky's repo, plus below mods:
 
@@ -25,13 +25,22 @@ PS4 9.0 - 9.6 (maybe others but I will only test on 9)
 
 # How to run
 
-Only one way for this repo.
+Deploy with docker-compose or on Unraid
+Your Docker host ideally supports macvlan or IPVLAN networking
 
-Deploy with docker-compose or on Unraid.
-Set up macvlan networking on its own IP
-Set port to 80
-Use firewall, AdGuard Home or PiHole to redirect PS's User Guide host+domain to your IP set above
-Visit USER GUIDE on your PS
+Docker Settings:
+• set br0 (or your macvlan) network mode
+• set Fixed IP address within your lan
+• set HTTP port to 80
+
+This allows a simple redirect without a reverse proxy
+Set the original "manuals.playstation.net" to point to your PSFree IP
+
+• AdGuard Home / Pi-hole: DNS rewrite → container IP
+• Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override (https://shorturl.at/Syx8T)
+
+Then, on PS4, open Settings → User Guide and the exploit loads automatically
+
 Enjoy.
 
 ## Locally
