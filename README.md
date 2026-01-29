@@ -1,49 +1,43 @@
-# PSFree
-PSFree is a unstable and work in progress jailbreak multi firmware website for the PlayStation 4 and the PlayStation 5.
+# PSFree_Docker
 
-This repo is based on the work of two other repo :
-- [PSFree from Kame repo](https://github.com/kmeps4/PSFree) 
+PSFree container for self-hosting and doing URL redirect
+
+This repo is a direct fork of Nasky's repo, plus below mods:
+
+- [PSFree from Nazky](https://github.com/Nazky/PSFree)
+
+Nazky's repo is in turn based on the work of two other repos:
+
+- [PSFree from Kame repo](https://github.com/kmeps4/PSFree)
 - [PSFree from Al-Azif repo](https://github.com/Al-Azif/psfree-lapse)
 
-<h1 style="color:red;text-align:center;">⚠️PLEASE DO NOT REPORT ERRORS FROM THIS REPO TO THEIR REPOS⚠️</h1>
+<h1 style="color:red;text-align:center;">⚠️DON'T REPORT ERRORS FROM THIS REPO UPSTREAM⚠️</h1>
 
-<h2 style="color:red;text-align:center;">⚠️PLEASE TEST OTHER REPOS BEFORE OPENING A ISSUE ON THIS REPO⚠️</h2>
+---
 
-___
+### Known issues
 
-### Know issues
-- Black screen on certain game.
-- Save corruption on certain game.
-- PS4 crash.
-- Some payloads not working correctly.
+- check upstream
 
 ### Currently working firmware
 
-This repo only support PS4 for now.
-
-
-| Console | Firmware |
-|:------ |:----------|
-| PS4 | 7.00 - 9.60 |
-
+PS4 9.0 - 9.6 (maybe others but I will only test on 9)
 
 # How to run
 
-## Website
-[Click Here](https://nazky.github.io/PSFree/)
+Only one way for this repo.
+
+Deploy with docker-compose or on Unraid.
+Set up macvlan networking on its own IP
+Set port to 80
+Use firewall, AdGuard Home or PiHole to redirect PS's User Guide host+domain to your IP set above
+Visit USER GUIDE on your PS
+Enjoy.
 
 ## Locally
 
-You need python !
+Not tested nor supported on my fork - look at upstream only for that.
 
-### Python
-##### Linux:
-Just start the 'start_server.sh'.
-
-###### Command:
-```bash
-sudo chmod start_server.sh
-./start_server.sh
-```
 ##### Windows:
-Just start (double-click) the start_server.bat.
+
+Forget about it, run a Linux server to hosty this: Unraid
