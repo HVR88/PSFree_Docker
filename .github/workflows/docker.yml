@@ -16,6 +16,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare Docker Hub README
+        run: |
+          cp docker_description.md README.md
+
+      - name: Read VERSION
+        id: ver
+        run: echo "version=$(cat VERSION | tr -d '\n\r ')" >> "$GITHUB_OUTPUT"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -31,5 +39,9 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
+          build-args: |
+            IMAGE_VERSION=${{ steps.ver.outputs.version }}
+            IMAGE_REVISION=${{ github.sha }}
           tags: |
             ${{ env.IMAGE_NAME }}:${{ github.ref_name == 'main' && 'latest' || 'develop' }}
+            ${{ env.IMAGE_NAME }}:${{ steps.ver.outputs.version }}
