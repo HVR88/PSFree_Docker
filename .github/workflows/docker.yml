@@ -10,6 +10,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/psfree_docker
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,4 +32,4 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            espressomatic/psfree_docker:${{ github.ref_name == 'main' && 'latest' || 'develop' }}
+            ${{ env.IMAGE_NAME }}:${{ github.ref_name == 'main' && 'latest' || 'develop' }}
