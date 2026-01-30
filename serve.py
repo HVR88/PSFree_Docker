@@ -11,10 +11,9 @@ from datetime import datetime
 import hashlib
 import urllib.request
 import re
-
+import urllib.parse
 
 console = Console()
-
 
 # Configuration for manifest generation
 EXCLUDED_DIRS = {".venv", ".git", "noneed"}
@@ -53,6 +52,7 @@ OUTPUT_FILE = "PSFree.manifest"
 def get_machine_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
+        # doesn't have to be reachable
         s.connect(("8.8.8.8", 80))
         ip = s.getsockname()[0]
     except Exception:
@@ -63,8 +63,10 @@ def get_machine_ip():
 
 
 def is_docker():
+    # Check for .dockerenv file
     if os.path.exists("/.dockerenv"):
         return True
+    # Check cgroup info for docker
     try:
         with open("/proc/1/cgroup", "rt") as f:
             return "docker" in f.read() or "kubepods" in f.read()
@@ -74,8 +76,11 @@ def is_docker():
 
 def get_host_ip():
     try:
-        return socket.gethostbyname("host.docker.internal")
+        # Try resolving Docker internal host (works on Docker Desktop and configured Linux setups)
+        host_ip = socket.gethostbyname("host.docker.internal")
+        return host_ip
     except socket.error:
+        # Fallback if not resolved, may use default gateway IP (requires extra code) or local IP
         return "Could not determine host IP"
 
 
@@ -96,16 +101,19 @@ def create_manifest():
     root_dir = os.path.dirname(os.path.abspath(__file__))
     manifest_path = os.path.join(root_dir, OUTPUT_FILE)
     with open(manifest_path, "w", encoding="utf-8") as f:
+        # Write header
         f.write("CACHE MANIFEST\n")
-        f.write("# v1\n")
+        f.write(f"# v1\n")
         f.write(f"# Generated on {datetime.now()}\n\n")
         f.write("CACHE:\n")
-
+        # Walk through all files
         for dirpath, dirnames, filenames in os.walk(root_dir):
+            # Remove excluded directories (modifies the dirnames list in-place)
             dirnames[:] = [d for d in dirnames if d not in EXCLUDED_DIRS]
             for filename in filenames:
                 filepath = os.path.join(dirpath, filename)
                 relpath = os.path.relpath(filepath, root_dir)
+                # Skip excluded files, extensions and the manifest file itself
                 ext = os.path.splitext(filename)[1].lower()
                 if (
                     ext in EXCLUDED_EXTENSIONS
@@ -113,80 +121,62 @@ def create_manifest():
                     or filename == OUTPUT_FILE
                 ):
                     continue
+                # Write relative path to manifest
                 f.write(f"{relpath.replace(os.sep, '/')}\n")
-
+        # Write network section
         f.write("\nNETWORK:\n")
         f.write("*\n")
 
 
 class CustomHandler(SimpleHTTPRequestHandler):
 
-    def do_GET(self):
-        # Serve any real file/dir that exists in the repo.
-        # Only fall back to redirecting to "/" when the path does not exist.
-        path_only = self.path.split("?", 1)[0].split("#", 1)[0]
-
-        # Canonical root
-        if path_only == "/":
-            return super().do_GET()
-
-        # If someone asks for /index.html explicitly, redirect to /
-        if path_only == "/index.html":
-            self.send_response(302)
-            self.send_header("Location", "/")
-            self.end_headers()
-            return
-
-        fs_path = self.translate_path(path_only)
-
-        # If it's an existing directory, ensure trailing slash then serve.
-        if os.path.isdir(fs_path):
-            if not path_only.endswith("/"):
-                self.send_response(302)
-                self.send_header("Location", path_only + "/")
-                self.end_headers()
-                return
-            return super().do_GET()
-
-        # If it's an existing file, serve it.
-        if os.path.isfile(fs_path):
-            return super().do_GET()
-
-        # Anything else (nonexistent) -> /
-        self.send_response(302)
+    def _send_root_redirect(self, code=302):
+        self.send_response(code)
         self.send_header("Location", "/")
         self.end_headers()
-        return
+
+    def _maybe_redirect_to_root(self):
+        """
+        Serve anything that exists in the repo's web hierarchy.
+        If the requested path maps to a missing file/dir (would 404), redirect to '/'.
+        Also normalize directory requests to end with '/' so relative assets resolve correctly.
+        """
+        # Strip query string / fragment for filesystem checks
+        raw_path = self.path
+        parsed = urllib.parse.urlsplit(raw_path)
+        path_only = parsed.path or "/"
+
+        local_path = self.translate_path(path_only)
+
+        # If it's an existing directory, ensure trailing slash (do NOT redirect to '/')
+        if os.path.isdir(local_path):
+            if not path_only.endswith("/"):
+                new_path = path_only + "/"
+                if parsed.query:
+                    new_path += "?" + parsed.query
+                self.send_response(301)
+                self.send_header("Location", new_path)
+                self.end_headers()
+                return True
+            return False  # directory with trailing slash; let handler serve (index.html, etc.)
+
+        # If file exists, serve normally
+        if os.path.exists(local_path):
+            return False
+
+        # Otherwise, it would 404: redirect to web root
+        self._send_root_redirect(302)
+        return True
+
+    def do_GET(self):
+        if self._maybe_redirect_to_root():
+            return
+        super().do_GET()
 
     def do_HEAD(self):
-        path_only = self.path.split("?", 1)[0].split("#", 1)[0]
-
-        if path_only == "/":
-            return super().do_HEAD()
-
-        if path_only == "/index.html":
-            self.send_response(302)
-            self.send_header("Location", "/")
-            self.end_headers()
+        if self._maybe_redirect_to_root():
             return
-
-        fs_path = self.translate_path(path_only)
-
-        if os.path.isdir(fs_path):
-            if not path_only.endswith("/"):
-                self.send_response(302)
-                self.send_header("Location", path_only + "/")
-                self.end_headers()
-                return
-            return super().do_HEAD()
-
-        if os.path.isfile(fs_path):
-            return super().do_HEAD()
-
-        self.send_response(302)
-        self.send_header("Location", "/")
-        self.end_headers()
-        return
+        super().do_HEAD()
 
     def do_POST(self):
         if self.path == "/generate_manifest":
@@ -203,7 +193,6 @@ class CustomHandler(SimpleHTTPRequestHandler):
                     "message": f"{str(e)}\nThis option only works on local server!\nPlease make sure your server is up.",
                 }
                 self.send_response(500)
-
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps(response).encode("utf-8"))
@@ -316,8 +305,13 @@ class CustomHandler(SimpleHTTPRequestHandler):
                     "https://github.com/Nazky/PSFree/raw/refs/heads/main/psfree/module/view.mjs",
                 ),
             ]
-
             results = []
+
+            # def file_hash(data):
+            #    return hashlib.sha256(data).hexdigest()
+
+            def is_mjs_file(filename):
+                return filename.lower().endswith(".mjs")
 
             for local_rel_path, url in files_to_update:
                 try:
@@ -327,13 +321,50 @@ class CustomHandler(SimpleHTTPRequestHandler):
                     if not abs_local_path.startswith(root_dir):
                         raise ValueError(f"Invalid path {local_rel_path}")
 
-                    with urllib.request.urlopen(url) as response:
-                        new_data = response.read()
+                    # Attempt to download file
+                    try:
+                        with urllib.request.urlopen(url) as response:
+                            raw_data = response.read()
+                    except Exception as download_error:
+                        results.append(
+                            f"{local_rel_path}: download failed ({download_error})"
+                        )
+                        continue  # skip to next file
+
+                    ## If .mjs file, decode, replace strings using regex, then encode back
+                    # if is_mjs_file(local_rel_path):
+                    #    text_data = raw_data.decode('utf-8')
+                    #    text_data = re.sub(r'(?<!\.)\./kpatch\b', './psfree/kpatch', text_data)
+                    #    text_data = re.sub(r'(?<!\.)\./module\b', './module', text_data)
+                    #    text_data = re.sub(r'(?<!\.)\./rop\b', '../rop', text_data)
+                    #    text_data = text_data.replace('alert("kernel exploit succeeded!");', '//alert("kernel exploit succeeded!");')
+                    #    text_data = text_data.replace("const textarea = document.createElement('textarea');", "const textarea = document.createElement('textarea');\n       textarea.style.opacity = '0'; // Set the opacity to 0")
+                    #    text_data = text_data.replace("const fset = document.createElement('frameset');", "const fset = document.createElement('frameset');\n           fset.style.opacity = '0'; // Set the opacity to 0")
+                    #    text_data = text_data.replace("const input = document.createElement('input');", "const input = document.createElement('input');\n    input.style.opacity = '0'; // Set the opacity to 0")
+                    #    text_data = text_data.replace("const foo = document.createElement('input');", "const foo = document.createElement('input');\n    foo.style.opacity = '0'; // Set the opacity to 0")
+                    #    text_data = text_data.replace("const bar = document.createElement('a');", "const bar = document.createElement('a');\n    bar.style.opacity = '0'; // Set the opacity to 0")
+                    #    new_data = text_data.encode('utf-8')
+                    # else:
+                    new_data = raw_data
+
+                    # Read old file content if exists
+                    old_data = b""
+                    if os.path.exists(abs_local_path):
+                        with open(abs_local_path, "rb") as f:
+                            old_data = f.read()
+
+                    # Compare hashes and write if different (need to be fixed)
+                    # if file_hash(new_data) != file_hash(old_data):
+                    #    os.makedirs(os.path.dirname(abs_local_path), exist_ok=True)
+                    #    with open(abs_local_path, 'wb') as f:
+                    #        f.write(new_data)
+                    #    results.append(f"{local_rel_path}: updated")
+                    # else:
+                    #    results.append(f"{local_rel_path}: skipped (no change)")
 
                     os.makedirs(os.path.dirname(abs_local_path), exist_ok=True)
                     with open(abs_local_path, "wb") as f:
                         f.write(new_data)
-
                     results.append(f"{local_rel_path}: updated")
 
                 except Exception as e:
@@ -345,6 +376,7 @@ class CustomHandler(SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({"results": results}).encode("utf-8"))
 
         else:
+            # existing 404
             self.send_response(404)
             self.end_headers()
             self.wfile.write(b"Not Found")
@@ -357,7 +389,7 @@ if len(sys.argv) > 1:
     try:
         PORT = int(sys.argv[1])
     except ValueError:
-        console.print("[bold red]Usage:[/] python serve.py [port]")
+        console.print("[bold red]Usage:[/] python serve.py [port]", style="red")
         sys.exit(1)
 
 console.print(
