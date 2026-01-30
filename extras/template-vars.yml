@@ -1,0 +1,45 @@
+container:
+  name: "PSFree Web Host"
+
+image:
+  repository: "espressomatic/psfree_docker"
+  tag: "develop"
+  registry: "https://hub.docker.com/r/espressomatic/psfree_docker:develop"
+
+runtime:
+  network: "bridge"
+  shell: "bash"
+  privileged: false
+
+ui:
+  webui: "http://[IP]:[PORT]/"
+  icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png"
+
+category: "Other:"
+
+overview: |
+  A lightweight local web server for hosting the PSFree exploit&#xD;
+  &#xD;
+  Container Settings:&#xD;
+  &#xA0;1. select/set your macvlan network (br0 on Unraid)&#xD;
+  &#xA0;2. set an available FIXED IP address within your lan&#xD;
+  &#xA0;3. set HTTP port to 80
+  &#xA0;&#xD;
+  This allows a simple redirect without a reverse proxy
+  &#xD;&#xA0;Additional Setup:&#xD;
+  &#xA0;4. Set the original "manuals.playstation.net" domain name to point to your container's IP address&#xD;
+  &#xD;
+  &#xA0;&#xA0;&#xA0;• AdGuard Home / Pi-hole: DNS rewrite &#x2192; container IP
+  &#xA0;&#xA0;&#xA0;• Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override
+  &#xD;On your PS4:&#xD;
+  &#xA0;&#xA0;Go to Settings &#x2192; User Guide and the exploit loads automatically &#x2192; Enjoy!
+
+config:
+  - name: "HTTP Port"
+    target: "PORT"
+    default: "80"
+    type: "Variable"
+    display: "always"
+    required: true
+    mask: false
+    description: "HTTP port exposed by container (sets PORT env)"
