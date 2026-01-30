@@ -4,11 +4,11 @@ This is a lightweight local web server for hosting the PSFree exploit
 
 This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus tweaks (mentioned below)
 
-This repo is intended for developers or anyone wanting to run the server bare-metal. If you are an end-user looking for the exploit you want the Docker Container itself:
+This repo is intended for developers or anyone wanting to run the server bare-metal. If you are an end-user, you want the Docker Container:
 
 > [!NOTE]
 >
-> ## **[Download the complete container on Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
+> ## **[Download ready-to-run from Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
 
 ### Tweaks
 
