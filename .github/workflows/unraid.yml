@@ -1,0 +1,50 @@
+name: Generate Unraid Template
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  unraid:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Generate Unraid template
+        run: |
+          if [ -f extras/gen-unraid-template.py ]; then
+            python extras/gen-unraid-template.py
+          else
+            echo "gen-unraid-template.py not found, skipping"
+          fi
+
+      - name: Upload Unraid template artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unraid-template
+          path: unraid-template.xml
+          if-no-files-found: ignore
+
+      - name: Attach Unraid template to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: unraid-template.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

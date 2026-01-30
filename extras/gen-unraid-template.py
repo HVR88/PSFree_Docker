@@ -4,7 +4,7 @@ from __future__ import annotations
 import os
 import sys
 
-TEMPLATE_VARS = os.path.join("extras", "template-vars.yml")
+TEMPLATE_VARS = os.path.join("extras", "unraid-vars.yml")
 OUTPUT_XML = os.path.join("extras", "unraid-template.xml")
 
 
@@ -70,15 +70,15 @@ def main() -> int:
 
     config_items = get(data, "config", default=[])
     if not isinstance(config_items, list):
-        die("extras/template-vars.yml: config must be a list")
+        die("extras/unraid-vars.yml: config must be a list")
 
     # Basic required checks (minimal)
     if not name:
-        die("extras/template-vars.yml: container.name is required")
+        die("extras/unraid-vars.yml: container.name is required")
     if not repo or not tag:
-        die("extras/template-vars.yml: image.repository and image.tag are required")
+        die("extras/unraid-vars.yml: image.repository and image.tag are required")
     if not webui:
-        die("extras/template-vars.yml: ui.webui is required")
+        die("extras/unraid-vars.yml: ui.webui is required")
 
     repository_full = f"{repo}:{tag}"
 
@@ -121,7 +121,7 @@ def main() -> int:
     # Config entries
     for c in config_items:
         if not isinstance(c, dict):
-            die("extras/template-vars.yml: each config entry must be a map/object")
+            die("extras/unraid-vars.yml: each config entry must be a map/object")
 
         cname = c.get("name", "")
         target = c.get("target", "")
@@ -133,7 +133,7 @@ def main() -> int:
         desc = c.get("description", "")
 
         if not cname or not target or not ctype:
-            die("extras/template-vars.yml: config item missing name/target/type")
+            die("extras/unraid-vars.yml: config item missing name/target/type")
 
         # Match your exact Config formatting (self-closing with attributes)
         lines.append(
