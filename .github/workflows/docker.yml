@@ -18,6 +18,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Generate Unraid template
+        run: |
+          set -euo pipefail
+          python3 ./extras/gen-unraid.py
+
+          # Support either output style:
+          #  - script writes ./unraid-template.xml
+          #  - script writes ./extras/unraid-template.xml
+          if [ -f ./extras/unraid-template.xml ] && [ ! -f ./unraid-template.xml ]; then
+            cp ./extras/unraid-template.xml ./unraid-template.xml
+          fi
+
+          test -s ./unraid-template.xml
+
       - name: Read VERSION
         id: ver
         if: github.event_name != 'release'

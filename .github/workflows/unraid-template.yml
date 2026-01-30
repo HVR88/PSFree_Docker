@@ -25,16 +25,22 @@ jobs:
         run: python3 -m pip install --upgrade pip pyyaml
 
       - name: Generate Unraid template
-        run: python3 extras/gen-unraid-template.py
+        run: |
+          python3 extras/gen-unraid.py
+          # Ensure the template is available at repo root for artifacts/releases
+          if [ -f extras/unraid-template.xml ] && [ ! -f unraid-template.xml ]; then
+            cp -f extras/unraid-template.xml unraid-template.xml
+          fi
+          test -f unraid-template.xml
 
       - name: Upload as workflow artifact
         uses: actions/upload-artifact@v4
         with:
           name: unraid-template
-          path: extras/unraid-template.xml
+          path: unraid-template.xml
 
       - name: Attach to GitHub Release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: extras/unraid-template.xml
+          files: unraid-template.xml
