@@ -110,15 +110,84 @@ function closesettings() {
 }
 
 function CheckFW() {
-  const fwVersion = "9.00";
-  document.getElementById("PS4FW").textContent =
-    `PS4 FW: ${fwVersion} | Compatible`;
-  document.getElementById("PS4FW").style.color = "green";
-  ps4fw = fwVersion.replace(".", "");
-  document.title = "PSFree | " + fwVersion;
+  const userAgent = navigator.userAgent;
+  const ps4Regex = /PlayStation(?:;\s*PlayStation)?(?: 4\/| 4 )?(\d+\.\d+)/;
+  const elementsToHide = [
+    "jailbreak-page",
+    "jailbreak",
+    "autojbchkb",
+    "agtext",
+    "payloadsbtn",
+    "generate-cache-btn",
+    "update-exploit",
+    "settings-btn",
+  ];
 
-  document.getElementById("install-psfrf").style.display = "flex";
-  document.getElementById("linuxb").style.display = "flex";
+  if (ps4Regex.test(userAgent)) {
+    // Extract firmware version using regex
+    const match = userAgent.match(ps4Regex);
+    const fwVersion = match ? match[1] : "Unknown"; // Get the firmware version or default to "Unknown"
+
+    if (
+      fwVersion === "9.00" ||
+      fwVersion === "9.03" ||
+      fwVersion === "9.60" ||
+      fwVersion === "7.00" ||
+      fwVersion === "7.01" ||
+      fwVersion === "7.02" ||
+      fwVersion === "7.50" ||
+      fwVersion === "7.51" ||
+      fwVersion === "7.55" ||
+      fwVersion === "8.00" ||
+      fwVersion === "8.01" ||
+      fwVersion === "8.03" ||
+      fwVersion === "8.50" ||
+      fwVersion === "8.52" ||
+      fwVersion === "9.04" ||
+      fwVersion === "9.50" ||
+      fwVersion === "9.51"
+    ) {
+      document.getElementById("PS4FW").textContent =
+        `PS4 FW: ${fwVersion} | Compatible`;
+      document.getElementById("PS4FW").style.color = "green";
+      ps4fw = fwVersion.replace(".", "");
+      document.getElementById("install-psfrf").style.display = "flex";
+      if (ps4fw === "903" || ps4fw === "960") {
+        document.getElementById("gameb").style.display = "none";
+      }
+      if (ps4fw === "900" || ps4fw === "903" || ps4fw === "960") {
+        document.getElementById("linuxb").style.display = "flex";
+      }
+    } else {
+      document.getElementById("PS4FW").textContent =
+        `PS4 FW: ${fwVersion || "Unknown"} | Incompatible`;
+      document.getElementById("PS4FW").style.color = "red";
+
+      elementsToHide.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = "none";
+      });
+    }
+
+    document.title = "PSFree | " + fwVersion;
+  } else {
+    let platform = "Unknown platform";
+
+    if (/Android/.test(userAgent)) platform = "Android";
+    else if (/iPhone|iPad|iPod/.test(userAgent)) platform = "iOS";
+    else if (/Macintosh/.test(userAgent)) platform = "MacOS";
+    else if (/Windows/.test(userAgent)) platform = "Windows";
+    else if (/Linux/.test(userAgent)) platform = "Linux";
+
+    document.getElementById("PS4FW").textContent =
+      `You're not on a PS4, platform: ${platform}`;
+    document.getElementById("PS4FW").style.color = "red";
+
+    elementsToHide.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+  }
 }
 
 function checksettings() {

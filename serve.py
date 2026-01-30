@@ -122,11 +122,11 @@ def create_manifest():
 class CustomHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        # Everything "page-like" must end up on "/" (trailing slash).
-        # Only allow real, existing non-HTML assets to be served directly.
+        # Serve any real file/dir that exists in the repo.
+        # Only fall back to redirecting to "/" when the path does not exist.
         path_only = self.path.split("?", 1)[0].split("#", 1)[0]
 
-        # Canonicalize to trailing-slash root.
+        # Canonical root
         if path_only == "/":
             return super().do_GET()
 
@@ -139,13 +139,20 @@ class CustomHandler(SimpleHTTPRequestHandler):
 
         fs_path = self.translate_path(path_only)
 
-        # Serve existing non-HTML files (assets) as-is.
-        if os.path.exists(fs_path) and os.path.isfile(fs_path):
-            _, ext = os.path.splitext(path_only.lower())
-            if ext not in (".html", ".htm"):
-                return super().do_GET()
+        # If it's an existing directory, ensure trailing slash then serve.
+        if os.path.isdir(fs_path):
+            if not path_only.endswith("/"):
+                self.send_response(302)
+                self.send_header("Location", path_only + "/")
+                self.end_headers()
+                return
+            return super().do_GET()
 
-        # Anything else (nonexistent, directories, HTML pages, extensionless paths) -> /
+        # If it's an existing file, serve it.
+        if os.path.isfile(fs_path):
+            return super().do_GET()
+
+        # Anything else (nonexistent) -> /
         self.send_response(302)
         self.send_header("Location", "/")
         self.end_headers()
@@ -165,10 +172,16 @@ class CustomHandler(SimpleHTTPRequestHandler):
 
         fs_path = self.translate_path(path_only)
 
-        if os.path.exists(fs_path) and os.path.isfile(fs_path):
-            _, ext = os.path.splitext(path_only.lower())
-            if ext not in (".html", ".htm"):
-                return super().do_HEAD()
+        if os.path.isdir(fs_path):
+            if not path_only.endswith("/"):
+                self.send_response(302)
+                self.send_header("Location", path_only + "/")
+                self.end_headers()
+                return
+            return super().do_HEAD()
+
+        if os.path.isfile(fs_path):
+            return super().do_HEAD()
 
         self.send_response(302)
         self.send_header("Location", "/")
