@@ -23,10 +23,6 @@ RUN pip install --no-cache-dir rich
 # Copy app into /PSFree
 COPY . /PSFree
 
-# Keep a copy of the Unraid template with the published container (best-effort)
-# If unraid-template.xml isn't present in the build context, do nothing.
-RUN if [ -f /PSFree/unraid-template.xml ]; then cp /PSFree/unraid-template.xml /unraid-template.xml; fi
-
 # Minimal OCI metadata (set at build time)
 LABEL org.opencontainers.image.version="$IMAGE_VERSION" \
       org.opencontainers.image.revision="$IMAGE_REVISION"

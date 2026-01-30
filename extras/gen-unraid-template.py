@@ -5,7 +5,7 @@ import os
 import sys
 
 TEMPLATE_VARS = os.path.join("extras", "unraid-vars.yml")
-OUTPUT_XML = os.path.join("extras", "unraid-template.xml")
+OUTPUT_XML = "unraid-template.xml"
 
 
 def die(msg: str, code: int = 1) -> None:
