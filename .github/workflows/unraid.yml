@@ -25,6 +25,10 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Install Python dependencies
+        run: |
+          pip install pyyaml
+
       - name: Generate Unraid template
         run: |
           if [ -f extras/gen-unraid-template.py ]; then
