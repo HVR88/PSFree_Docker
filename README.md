@@ -4,12 +4,7 @@ This is a lightweight local web server for hosting the PSFree exploit
 
 This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus tweaks (mentioned below)
 
-### Don't report any GoldHEN/exploit errors here
-
----
-
 ### Tweaks
-
 - web host drops extra path and document text from URL - just hit the host and it's automatic
 - updates to allow running default http port 80
 - automatic build action pushes container to Docker hub
@@ -17,10 +12,6 @@ This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus
 - docker compose with instructions and exmaple defaults
 - Unraid template for manual installation and deployment to Unraid Community Apps
 - Unraid Docker 'app' icon
-
-### Known issues
-
-- check upstream
 
 ### Currently working firmware
 
@@ -36,7 +27,10 @@ Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should id
 2. set an available FIXED IP address within your lan
 3. set HTTP port to 80
 
-<br>This allows a simple redirect without a reverse proxy
+This allows a simple redirect without a reverse proxy
+
+>[!NOTE]
+>## **[Download the complete container on Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
 
 #### **Additional Setup:**
 
