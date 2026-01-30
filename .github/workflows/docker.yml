@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ env.IMAGE_NAME }}
-          readme-filepath: ./docker_description.md
+          readme-filepath: ./extras/docker_description.md
 
       - name: Build and push (amd64)
         uses: docker/build-push-action@v5
