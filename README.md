@@ -5,6 +5,7 @@ This is a lightweight local web server for hosting the PSFree exploit
 This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus tweaks (mentioned below)
 
 ### Tweaks
+
 - web host drops extra path and document text from URL - just hit the host and it's automatic
 - updates to allow running default http port 80
 - automatic build action pushes container to Docker hub
@@ -29,8 +30,9 @@ Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should id
 
 This allows a simple redirect without a reverse proxy
 
->[!NOTE]
->## **[Download the complete container on Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
+> [!NOTE]
+>
+> ## **[Download the complete container on Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
 
 #### **Additional Setup:**
 
