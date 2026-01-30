@@ -122,53 +122,58 @@ def create_manifest():
 class CustomHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        # Normalize unwanted entry paths to `/` while never redirecting assets.
+        # Everything "page-like" must end up on "/" (trailing slash).
+        # Only allow real, existing non-HTML assets to be served directly.
         path_only = self.path.split("?", 1)[0].split("#", 1)[0]
 
-        # Always allow root.
-        if path_only in ("/", "/index.html"):
+        # Canonicalize to trailing-slash root.
+        if path_only == "/":
             return super().do_GET()
 
-        # Allow directories (so /folder/ serves /folder/index.html if present).
-        if path_only.endswith("/"):
-            return super().do_GET()
-
-        # Allow any request that has a file extension (treat as an asset).
-        _, ext = os.path.splitext(path_only)
-        if ext:
-            return super().do_GET()
-
-        # Extensionless: if it doesn't map to a real file/dir, force to root.
-        fs_path = self.translate_path(path_only)
-        if not os.path.exists(fs_path):
+        # If someone asks for /index.html explicitly, redirect to /
+        if path_only == "/index.html":
             self.send_response(302)
             self.send_header("Location", "/")
             self.end_headers()
             return
 
-        return super().do_GET()
+        fs_path = self.translate_path(path_only)
+
+        # Serve existing non-HTML files (assets) as-is.
+        if os.path.exists(fs_path) and os.path.isfile(fs_path):
+            _, ext = os.path.splitext(path_only.lower())
+            if ext not in (".html", ".htm"):
+                return super().do_GET()
+
+        # Anything else (nonexistent, directories, HTML pages, extensionless paths) -> /
+        self.send_response(302)
+        self.send_header("Location", "/")
+        self.end_headers()
+        return
 
     def do_HEAD(self):
         path_only = self.path.split("?", 1)[0].split("#", 1)[0]
 
-        if path_only in ("/", "/index.html"):
+        if path_only == "/":
             return super().do_HEAD()
 
-        if path_only.endswith("/"):
-            return super().do_HEAD()
-
-        _, ext = os.path.splitext(path_only)
-        if ext:
-            return super().do_HEAD()
-
-        fs_path = self.translate_path(path_only)
-        if not os.path.exists(fs_path):
+        if path_only == "/index.html":
             self.send_response(302)
             self.send_header("Location", "/")
             self.end_headers()
             return
 
-        return super().do_HEAD()
+        fs_path = self.translate_path(path_only)
+
+        if os.path.exists(fs_path) and os.path.isfile(fs_path):
+            _, ext = os.path.splitext(path_only.lower())
+            if ext not in (".html", ".htm"):
+                return super().do_HEAD()
+
+        self.send_response(302)
+        self.send_header("Location", "/")
+        self.end_headers()
+        return
 
     def do_POST(self):
         if self.path == "/generate_manifest":
