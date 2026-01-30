@@ -4,6 +4,12 @@ This is a lightweight local web server for hosting the PSFree exploit
 
 This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus tweaks (mentioned below)
 
+This repo is intended for developers or anyone wanting to run the server bare-metal. If you are an end-user looking for the exploit you want the Docker Container itself:
+
+> [!NOTE]
+>
+> ## **[Download the complete container on Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
+
 ### Tweaks
 
 - web host drops extra path and document text from URL - just hit the host and it's automatic
@@ -18,7 +24,13 @@ This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus
 
 PS4 9.0 - 9.6 (maybe others but I will only test on 9)
 
-# How to run
+## Requirements for this repo
+
+You need to configure the following two secrets to have GitHub automatically push your build to Docker Hub
+-DOCKERHUB_USERNAME (this is your normal Docker Hub login username)
+-DOCKERHUB_TOKEN (you need to generater this at Docker Hub)
+
+# Docker Container Instructions (go to Docker Hub)
 
 Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should ideally support macvlan or IPVLAN networking
 

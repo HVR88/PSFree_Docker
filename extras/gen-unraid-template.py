@@ -146,7 +146,10 @@ def main() -> int:
     lines.append("</Container>")
     lines.append("")  # newline at EOF
 
-    os.makedirs(os.path.dirname(OUTPUT_XML), exist_ok=True)
+    out_dir = os.path.dirname(OUTPUT_XML)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
+
     with open(OUTPUT_XML, "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(lines))
 
