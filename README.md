@@ -8,7 +8,7 @@ This repo is intended for developers or anyone wanting to run the server bare-me
 
 > [!NOTE]
 >
-> ## **[Download ready-to-run from Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
+> ## **[espressomatic/psfree_docker](https://hub.docker.com/r/espressomatic/psfree_docker)**
 
 ### Tweaks
 
