@@ -40,18 +40,3 @@ This allows a simple redirect without a reverse proxy
   <Config Name="HTTP Port" Target="PORT" Default="80" Type="Variable" Display="always" Required="true" Mask="false" Description="HTTP port exposed by container (sets PORT env)" />
   <TailscaleStateDir/>
 </Container>
-
-A lightweight local web server for hosting the PSFree exploit&#xD;
-&#xD;
-Container Settings:&#xD;
-&#xA0;1. select/set your macvlan network (br0 on Unraid)&#xD;
-&#xA0;2. set an available FIXED IP address within your lan&#xD;
-&#xA0;3. set HTTP port to 80
-&#xA0;&#xD;
-This allows a simple redirect without a reverse proxy
-&#xD;&#xA0;&#xD;Additional Setup:&#xD;
-&#xA0;Set the original "manuals.playstation.net" domain name to point to your container's IP address&#xD;
-&#xA0;&#xA0;- AdGuard Home / Pi-hole: DNS rewrite &#x2192; container IP&#xD;
-&#xA0;&#xA0;- Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override&#xD;
-&#xA0;&#xD;On your PS4:&#xD;
-Go to Settings &#x2192; User Guide and the exploit loads automatically &#x2192; Enjoy!
