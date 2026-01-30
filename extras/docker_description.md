@@ -1,10 +1,10 @@
 # PSFree Web Host
 
-This is a lightweight local web server for hosting the PSFree exploit
+This is a lightweight local web server for hosting the PSFree exploit with latest GoldHEN
 
 #### **Currently working firmware:**
 
-PS4 9.0 - 9.6 (maybe others back to 7)
+PS4 7.0 - 9.6
 
 # How to run
 

@@ -2,10 +2,10 @@
 
 This is a lightweight local web server for hosting the PSFree exploit
 
-This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) plus tweaks (mentioned below)
+This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) - plus tweaks (mentioned below)
+<br>This repo is intended for developers - if you want the exploit, look below:
 
-This repo is intended for developers or anyone wanting to run the server bare-metal.
-Normal people want the **Docker Container:**
+_Normal people want the **Docker Container:**_
 
 > [!NOTE]
 >
@@ -13,6 +13,7 @@ Normal people want the **Docker Container:**
 
 ### Tweaks
 
+- updated to latest (Jan 2026) GoldHEN 2.4b18.8
 - web host drops extra path and document text from URL - just hit the host and it's automatic
 - updates to allow running default http port 80
 - automatic build action pushes container to Docker hub
@@ -23,13 +24,14 @@ Normal people want the **Docker Container:**
 
 ### Currently working firmware
 
-PS4 9.0 - 9.6 (maybe others but I will only test on 9)
+PS4 7.0 - 9.6 (maybe others but I only run on 9.0)
 
-## Requirements for this repo
+## Dev Requirements for this repo
 
-You need to configure the following two secrets to have GitHub automatically push your build to Docker Hub
--DOCKERHUB_USERNAME (this is your normal Docker Hub login username)
--DOCKERHUB_TOKEN (you need to generater this at Docker Hub)
+You need to configure the following two secrets in your GitHub account to automatically push your build to Docker Hub
+
+- DOCKERHUB_USERNAME (this is your normal Docker Hub login username)
+- DOCKERHUB_TOKEN (you need to generater this at Docker Hub)
 
 # Docker Container Instructions (go to Docker Hub)
 
