@@ -77,9 +77,10 @@ def main() -> int:
 
     category = get(data, "category", default="")
 
-    support = get(data, "links", "support")
-    project = get(data, "links", "project")
-    more_info = get(data, "links", "more_info")
+    # Links may be stored either under `links:` or as flat/top-level keys
+    support = get(data, "links", "support") or get(data, "support")
+    project = get(data, "links", "project") or get(data, "project")
+    more_info = get(data, "links", "more_info") or get(data, "more_info")
 
     myip = get(data, "runtime", "myip")
 
@@ -87,8 +88,8 @@ def main() -> int:
     post_args = get(data, "runtime", "post_args")
     cpuset = get(data, "runtime", "cpuset")
 
-    donate_text = get(data, "links", "donate_text")
-    donate_link = get(data, "links", "donate_link")
+    donate_text = get(data, "links", "donate_text") or get(data, "donate_text")
+    donate_link = get(data, "links", "donate_link") or get(data, "donate_link")
 
     requires = get(data, "requires")
 
