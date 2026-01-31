@@ -54,7 +54,7 @@ config:
   - name: "Web HTTP Port"
     target: "PORT"
     default: "80"
-    Mode: "{3}"
+    mode: "{3}"
     type: "Variable"
     display: "always"
     required: true
