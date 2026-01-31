@@ -15,6 +15,7 @@ ui:
   webui: "http://[IP]:[PORT:80]/"
   icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/main/extras/icon.png"
 
+template_url: "https://raw.githubusercontent.com/HVR88/unraid_templates/refs/heads/main/PSFree_Docker/unraid-template.xml"
 category: "Network:Web Games:Tools"
 
 # Links shown in Unraid container menu
@@ -22,7 +23,6 @@ project: "https://hub.docker.com/r/espressomatic/psfree_docker"
 support: "https://forums.unraid.net/topic/196902-support-psfree-web-host/"
 
 # Optional template metadata (leave empty; generator will omit from XML when empty)
-template_url: ""
 donate_text: ""
 donate_link: ""
 requires: ""
