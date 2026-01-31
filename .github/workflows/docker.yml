@@ -14,11 +14,6 @@ on:
         required: false
         default: false
         type: boolean
-      preview_description:
-        description: "Preview docker_description.md in the run summary and upload as an artifact"
-        required: false
-        default: true
-        type: boolean
 
 jobs:
   docker:
@@ -45,25 +40,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Preview Docker Hub description
-        if: github.event_name == 'workflow_dispatch' && inputs.preview_description
-        run: |
-          echo "## Docker Hub Description Preview" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "Source: extras/docker_description.md" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "```markdown" >> "$GITHUB_STEP_SUMMARY"
-          cat ./extras/docker_description.md >> "$GITHUB_STEP_SUMMARY"
-          echo "```" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload Docker Hub description (artifact)
-        if: github.event_name == 'workflow_dispatch' && inputs.preview_description
-        uses: actions/upload-artifact@v4
-        with:
-          name: dockerhub-description
-          path: ./extras/docker_description.md
-          if-no-files-found: error
 
       - name: Update Docker Hub repository overview
         if: github.event_name == 'release' || github.ref_name == 'main' || (github.event_name == 'workflow_dispatch' && inputs.update_description)
