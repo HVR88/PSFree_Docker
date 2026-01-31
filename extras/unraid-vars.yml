@@ -54,9 +54,9 @@ config:
   - name: "Web HTTP Port"
     target: "PORT"
     default: "80"
-    Mode="{3}"
+    Mode: "{3}"
     type: "Variable"
     display: "always"
     required: true
     mask: false
-    description: "Web port for exploit host - should be 80)"
+    description: "Web port for exploit host - should be 80"
