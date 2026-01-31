@@ -17,10 +17,11 @@ _Normal people want the **Docker Container:**_
 
 ### Tweaks
 
+- _pre-built container ready to deploy, hosted at Docker Hub and Unraid Apps_
 - **updated to latest (Jan 2026) GoldHEN 2.4b18.8**
 - amd64 and aarch64 support (x86 + ARM)
-- web host drops extra path and document text from URL - just hit the host and it's automatic
-- updates to allow running default http port 80
+- _web host drops extra path and document text from URL - just hit the host and it's automatic_
+- _updates to allow running default http port 80_
 - automatic build action pushes container to Docker hub
 - build versioning for repo and docker container
 - docker compose with instructions and exmaple defaults
