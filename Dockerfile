@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 python:3.11-slim-bookworm
+FROM python:3.11-slim-bookworm
 ARG IMAGE_VERSION
 ARG IMAGE_REVISION
 
