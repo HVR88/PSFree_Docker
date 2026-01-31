@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Publish Unraid template + icon to templates repo
-        if: github.event_name == 'release' || github.ref_name == 'main' || github.ref_name == 'develop'
+        if: github.event_name == 'release' || github.ref_name == 'main'
         env:
           TEMPLATES_REPO_PAT: ${{ secrets.TEMPLATES_REPO_PAT }}
         run: |
