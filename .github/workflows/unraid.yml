@@ -11,7 +11,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: read
 
 jobs:
   unraid:
@@ -32,7 +31,8 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install pyyaml
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml
 
       - name: Generate Unraid template
         shell: bash
@@ -47,7 +47,8 @@ jobs:
 
           # Ensure expected output exists for later steps
           if [ ! -f unraid-template.xml ]; then
-            echo "unraid-template.xml not found after generation (or generation was skipped)."
+            echo "ERROR: unraid-template.xml was not generated"
+            exit 1
           fi
 
           # Try to locate an icon file in this repo for publishing into the templates repo.
