@@ -15,3 +15,4 @@ archive/
 # local git hooks / vscode guardrails (local-only)
 .code/git-hooks/
 .vscode/settings.json
+release-main.sh
