@@ -1,6 +1,7 @@
 # PSFree Web Host - Docker Deployment
 
 This is a lightweight local web server for hosting the PSFree exploit
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png" alt="PSFree Web Host" />
 </p>
@@ -16,7 +17,8 @@ _Normal people want the **Docker Container:**_
 
 ### Tweaks
 
-- updated to latest (Jan 2026) GoldHEN 2.4b18.8
+- **updated to latest (Jan 2026) GoldHEN 2.4b18.8**
+- amd64 and aarch64 support (x86 + ARM)
 - web host drops extra path and document text from URL - just hit the host and it's automatic
 - updates to allow running default http port 80
 - automatic build action pushes container to Docker hub

@@ -2,6 +2,10 @@
 
 This is a lightweight local web server for hosting the PSFree exploit with latest GoldHEN
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png" alt="PSFree Web Host" />
+</p>
+
 #### **Currently working firmware:**
 
 PS4 7.0 - 9.6
