@@ -18,6 +18,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Read VERSION
         id: ver
         if: github.event_name != 'release'
@@ -40,12 +43,12 @@ jobs:
           repository: ${{ env.IMAGE_NAME }}
           readme-filepath: ./extras/docker_description.md
 
-      - name: Build and push (amd64) [branch]
+      - name: Build and push (amd64+arm64) [branch]
         if: github.event_name != 'release'
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             IMAGE_VERSION=${{ steps.ver.outputs.version }}
@@ -54,12 +57,12 @@ jobs:
             ${{ env.IMAGE_NAME }}:${{ github.ref_name == 'main' && 'latest' || 'develop' }}
             ${{ env.IMAGE_NAME }}:${{ steps.ver.outputs.version }}
 
-      - name: Build and push (amd64) [release]
+      - name: Build and push (amd64+arm64) [release]
         if: github.event_name == 'release'
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             IMAGE_VERSION=${{ github.event.release.tag_name }}
