@@ -97,6 +97,8 @@ def main() -> int:
     overview = get(data, "overview", default="")
 
     config_items = get(data, "config", default=[])
+    if config_items is None:
+        config_items = []
     if not isinstance(config_items, list):
         die("extras/unraid-vars.yml: config must be a list")
 
