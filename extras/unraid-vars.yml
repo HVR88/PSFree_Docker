@@ -1,0 +1,70 @@
+container:
+  name: "PSFree Web Host"
+
+image:
+  repository: "espressomatic/psfree_docker"
+  tag: "develop"
+  registry: "https://github.com/HVR88/PSFree_Docker"
+
+runtime:
+  network: "bridge"
+  shell: "bash"
+  privileged: false
+
+ui:
+  webui: "http://[IP]:[PORT:80]/"
+  icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png"
+
+category: "Network:Web Games:Tools"
+
+# Links shown in Unraid container menu
+project: "https://hub.docker.com/r/espressomatic/psfree_docker"
+support: "https://forums.unraid.net/topic/XXXXX-psfree-web-host/"
+
+# Optional template metadata (leave empty; generator will omit from XML when empty)
+template_url: ""
+donate_text: ""
+donate_link: ""
+requires: ""
+
+# Optional runtime extras (leave empty; generator will omit from XML when empty)
+myip: true
+extra_params: ""
+post_args: ""
+cpuset: ""
+
+overview: |
+  A lightweight local web server for hosting the PSFree exploit&#xD;
+  &#xD;
+  Container Settings:&#xD;
+  &#xA0;1. select/set your macvlan network (br0 on Unraid)&#xD;
+  &#xA0;2. set an available FIXED IP address within your lan
+  &#xA0;&#xD;
+  This allows a simple redirect without a reverse proxy
+  &#xD;&#xA0;Additional Setup:&#xD;
+  &#xA0;3. Set the "manuals.playstation.net" domain name to point to your container's IP address&#xD;
+  &#xD;
+  &#xA0;&#xA0;&#xA0;• AdGuard Home / Pi-hole: DNS rewrite &#x2192; container IP
+  &#xA0;&#xA0;&#xA0;• Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override
+  &#xD;On your PS4:&#xD;
+  &#xA0;&#xA0;Go to Settings &#x2192; User Guide and the exploit loads automatically &#x2192; Enjoy!
+
+config:
+  - name: "Internal HTTP Port"
+    target: "PORT"
+    default: "80"
+    mode: "{3}"
+    type: "Variable"
+    display: "advanced"
+    required: true
+    mask: false
+    description: "Container's internal port - 80 for br0 (macvlan/ipvlan)"
+  - name: "WebUI Port (Bridge)"
+    target: "80"
+    default: "52721"
+    mode: "tcp"
+    type: "Port"
+    display: "always"
+    required: false
+    mask: false
+    description: "Port used by Bridge type networks (ignore for br0)"
