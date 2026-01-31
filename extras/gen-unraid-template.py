@@ -80,7 +80,6 @@ def main() -> int:
     # Links may be stored either under `links:` or as flat/top-level keys
     support = get(data, "links", "support") or get(data, "support")
     project = get(data, "links", "project") or get(data, "project")
-    more_info = get(data, "links", "more_info") or get(data, "more_info")
 
     myip = get(data, "runtime", "myip")
 
@@ -134,8 +133,6 @@ def main() -> int:
         lines.append(xml_tag("Support", str(support)))
     if has_value(project):
         lines.append(xml_tag("Project", str(project)))
-    if has_value(more_info):
-        lines.append(xml_tag("MoreInfo", str(more_info)))
 
     # Overview block: preserve exactly, including &#xD; etc.
     lines.append("  <Overview>")

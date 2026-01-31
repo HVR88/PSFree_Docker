@@ -4,7 +4,7 @@ container:
 image:
   repository: "espressomatic/psfree_docker"
   tag: "develop"
-  registry: "https://hub.docker.com/r/espressomatic/psfree_docker:develop"
+  registry: "https://github.com/HVR88/PSFree_Docker"
 
 runtime:
   network: "bridge"
@@ -20,7 +20,6 @@ category: "Network:Web Games:Tools"
 # Links shown in Unraid container menu
 project: "https://hub.docker.com/r/espressomatic/psfree_docker"
 support: "https://forums.unraid.net/topic/XXXXX-psfree-web-host/"
-more_info: "https://github.com/HVR88/PSFree_Docker"
 
 # Optional template metadata (leave empty; generator will omit from XML when empty)
 template_url: ""

@@ -5,11 +5,10 @@ This is a lightweight local web server for hosting the PSFree exploit
 <p align="center">
   <img src="https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png" alt="PSFree Web Host" />
 </p>
-This repo is a fork of [PSFree from Nazky](https://github.com/Nazky/PSFree) - plus tweaks (mentioned below)
 
-This repo is intended for developers - if you want the exploit, look below:
+PSFree_Docker is based on [PSFree from Nazky](https://github.com/Nazky/PSFree) - (this repo is mainly interesting for developers)
 
-_Normal people want the **Docker Container:**_
+_Normal people want the **Docker Container**_ to exploit their PS4:
 
 > [!NOTE]
 >
