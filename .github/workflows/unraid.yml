@@ -15,6 +15,10 @@ permissions:
 jobs:
   unraid:
     runs-on: ubuntu-latest
+    env:
+      TEMPLATE_REPO: ${{ vars.UNRAID_TEMPLATES_REPO }}
+      TEMPLATE_REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+      THIS_REPO_NAME: ${{ github.event.repository.name }}
 
     steps:
       - name: Checkout repository
@@ -27,14 +31,42 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install pyyaml
+          python -m pip install --upgrade pip
+          python -m pip install pyyaml
 
       - name: Generate Unraid template
+        shell: bash
         run: |
+          set -euo pipefail
+
           if [ -f extras/gen-unraid-template.py ]; then
             python extras/gen-unraid-template.py
           else
             echo "gen-unraid-template.py not found, skipping"
+          fi
+
+          # Ensure expected output exists for later steps
+          if [ ! -f unraid-template.xml ]; then
+            echo "ERROR: unraid-template.xml was not generated"
+            exit 1
+          fi
+
+          # Try to locate an icon file in this repo for publishing into the templates repo.
+          # Supported locations (first found wins): extras/icon.png, extras/icon.jpg, icon.png, icon.jpg
+          ICON_SRC=""
+          for p in "extras/icon.png" "extras/icon.jpg" "icon.png" "icon.jpg"; do
+            if [ -f "$p" ]; then
+              ICON_SRC="$p"
+              break
+            fi
+          done
+
+          if [ -n "$ICON_SRC" ]; then
+            echo "Found icon: $ICON_SRC"
+            # Copy to a predictable name for downstream steps
+            cp -f "$ICON_SRC" "unraid-icon.${ICON_SRC##*.}"
+          else
+            echo "No icon found in expected locations; skipping icon publish."
           fi
 
       - name: Upload Unraid template artifact
@@ -44,6 +76,63 @@ jobs:
           name: unraid-template
           path: unraid-template.xml
           if-no-files-found: ignore
+
+      - name: Checkout templates repository
+        if: ${{ env.TEMPLATE_REPO != '' && env.TEMPLATE_REPO_TOKEN != '' }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TEMPLATE_REPO }}
+          token: ${{ env.TEMPLATE_REPO_TOKEN }}
+          path: templates_repo
+
+      - name: Copy template + icon into templates repository
+        if: ${{ env.TEMPLATE_REPO != '' && env.TEMPLATE_REPO_TOKEN != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DEST_DIR="templates_repo/${THIS_REPO_NAME}"
+          mkdir -p "$DEST_DIR"
+
+          if [ -f unraid-template.xml ]; then
+            cp -f unraid-template.xml "$DEST_DIR/unraid-template.xml"
+          else
+            echo "unraid-template.xml not present; nothing to copy."
+          fi
+
+          # Copy whichever icon we prepared, if any
+          if [ -f unraid-icon.png ]; then
+            cp -f unraid-icon.png "$DEST_DIR/icon.png"
+          elif [ -f unraid-icon.jpg ]; then
+            cp -f unraid-icon.jpg "$DEST_DIR/icon.jpg"
+          else
+            echo "No prepared icon file found; skipping icon copy."
+          fi
+
+      - name: Commit and push templates repository changes
+        if: ${{ env.TEMPLATE_REPO != '' && env.TEMPLATE_REPO_TOKEN != '' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd templates_repo
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Update Unraid template for ${THIS_REPO_NAME}"
+          git push
+
+      - name: Skip templates repo publish (missing config)
+        if: ${{ env.TEMPLATE_REPO == '' || env.TEMPLATE_REPO_TOKEN == '' }}
+        run: |
+          echo "Skipping publish to templates repo. Set UNRAID_TEMPLATES_REPO (repo like owner/name) as a GitHub Actions variable and REPO_TOKEN as the shared repo token secret."
 
       - name: Attach Unraid template to GitHub Release
         if: github.event_name == 'release'
