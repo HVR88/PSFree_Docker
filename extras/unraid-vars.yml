@@ -3,7 +3,7 @@ container:
 
 image:
   repository: "espressomatic/psfree_docker"
-  tag: "develop"
+  tag: "latest"
   registry: "https://github.com/HVR88/PSFree_Docker"
 
 runtime:
@@ -13,7 +13,7 @@ runtime:
 
 ui:
   webui: "http://[IP]:[PORT:80]/"
-  icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png"
+  icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/main/extras/icon.png"
 
 category: "Network:Web Games:Tools"
 

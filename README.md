@@ -16,14 +16,14 @@ _Normal people want the **Docker Container**_ to exploit their PS4:
 
 ### Tweaks
 
-- _pre-built container ready to deploy, hosted at Docker Hub and Unraid Apps_
-- **updated to latest (Jan 2026) GoldHEN 2.4b18.8**
-- amd64 and aarch64 support (x86 + ARM)
-- _web host drops extra path and document text from URL - just hit the host and it's automatic_
-- _updates to allow running default http port 80_
-- automatic build action pushes container to Docker hub
-- build versioning for repo and docker container
-- docker compose with instructions and exmaple defaults
+- _Pre-built container ready to deploy, hosted at Docker Hub and Unraid Apps_
+- **Updated to latest (Jan 2026) GoldHEN 2.4b18.8**
+- Multi-Architecture: amd64 and arm64 support
+- _Web server drops paths/text from URL - "Just Works" on PS4_
+- _Updated to allow running default http port 80_
+- Automatic build action pushes container to Docker hub
+- Build versioning for repo and docker container
+- Docker compose with instructions and exmaple defaults
 - Unraid template for manual installation and deployment to Unraid Community Apps
 - Unraid Docker 'app' icon
 

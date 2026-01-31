@@ -8,6 +8,12 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      update_description:
+        description: "Update Docker Hub description (writes to Docker Hub)"
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   docker:
@@ -17,6 +23,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Read VERSION
         id: ver
@@ -33,6 +42,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Update Docker Hub repository overview
+        if: github.event_name == 'release' || github.ref_name == 'main' || (github.event_name == 'workflow_dispatch' && inputs.update_description)
         uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -40,26 +50,26 @@ jobs:
           repository: ${{ env.IMAGE_NAME }}
           readme-filepath: ./extras/docker_description.md
 
-      - name: Build and push (amd64) [branch]
+      - name: Build and push (amd64+arm64) [branch]
         if: github.event_name != 'release'
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             IMAGE_VERSION=${{ steps.ver.outputs.version }}
             IMAGE_REVISION=${{ github.sha }}
           tags: |
-            ${{ env.IMAGE_NAME }}:${{ github.ref_name == 'main' && 'latest' || 'develop' }}
-            ${{ env.IMAGE_NAME }}:${{ steps.ver.outputs.version }}
+            ${{ env.IMAGE_NAME }}:develop
+            ${{ env.IMAGE_NAME }}:${{ steps.ver.outputs.version }}-dev
 
-      - name: Build and push (amd64) [release]
+      - name: Build and push (amd64+arm64) [release]
         if: github.event_name == 'release'
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             IMAGE_VERSION=${{ github.event.release.tag_name }}

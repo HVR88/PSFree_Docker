@@ -10,6 +10,13 @@ A lightweight local web server for hosting the PSFree exploit with latest GoldHE
 
 PS4 7.0 - 9.6
 
+# Details
+
+- **Contains GoldHEN 2.4b18.8 (Jan 2026)**
+- Multi-Architecture: amd64 and arm64 support
+- _Web server drops paths/text from URL - "Just Works" on PS4_
+- _Runs on http port 80_
+
 # How to run
 
 Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should ideally support MACVLAN or IPVLAN networking
