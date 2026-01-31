@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/psfree_docker
+      UNRAID_TEMPLATES_REPO: HVR88/unraid_templates
+      UNRAID_TEMPLATES_BRANCH: main
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,6 +51,43 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: ${{ env.IMAGE_NAME }}
           readme-filepath: ./extras/docker_description.md
+
+      - name: Generate Unraid template
+        run: |
+          if [ -f extras/gen-unraid-template.py ]; then
+            python -m pip install --upgrade pip
+            python -m pip install pyyaml
+            python extras/gen-unraid-template.py || true
+          fi
+
+      - name: Publish Unraid template + icon to templates repo
+        if: github.event_name == 'release' || github.ref_name == 'main'
+        env:
+          TEMPLATES_REPO_PAT: ${{ secrets.TEMPLATES_REPO_PAT }}
+        run: |
+          set -e
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          rm -rf /tmp/unraid_templates
+          git clone "https://x-access-token:${TEMPLATES_REPO_PAT}@github.com/${UNRAID_TEMPLATES_REPO}.git" /tmp/unraid_templates
+
+          TEMPLATE_DIR="/tmp/unraid_templates/PSFree_Docker"
+          mkdir -p "$TEMPLATE_DIR"
+
+          install -m 0644 unraid-template.xml "$TEMPLATE_DIR/unraid-template.xml" 2>/dev/null || true
+          install -m 0644 extras/icon.png "$TEMPLATE_DIR/icon.png" 2>/dev/null || true
+
+          cd /tmp/unraid_templates
+          git add PSFree_Docker/
+
+          if git diff --cached --quiet; then
+            echo "No template changes to publish"
+            exit 0
+          fi
+
+          git commit -m "Update PSFree Unraid template from ${GITHUB_REPOSITORY}@${GITHUB_SHA}"
+          git push origin "HEAD:${UNRAID_TEMPLATES_BRANCH}"
 
       - name: Build and push (amd64+arm64) [branch]
         if: github.event_name != 'release'
