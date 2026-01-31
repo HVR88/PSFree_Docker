@@ -12,7 +12,7 @@ runtime:
   privileged: false
 
 ui:
-  webui: "http://[IP]:[80]/"
+  webui: "http://[IP]:[PORT:80]/"
   icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png"
 
 category: "Network:Web Games:Tools"
@@ -61,7 +61,7 @@ config:
     mask: false
     description: "Web port for exploit host - should be 80"
   - name: "WebUI Port (Unraid)"
-    target: "PORT"
+    target: "52721"
     default: "52721"
     mode: "tcp"
     type: "Port"
