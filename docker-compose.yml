@@ -8,7 +8,7 @@ services:
     #   This MUST match the *container-side* port used in `ports:` below.
     #   Example (default for bridge) ports: "52721:80" -> PORT must be 80
     #   Example: ports: "8080:80"  -> PORT must be 80
-    #   Example: ports: "52721:52721" -> PORT must be 52721
+    #   Example: ports: "52721:52721" -> PORT must be 52721 - don't do this
     #
     # macvlan mode:
     #   This is the port clients connect to directly on the container IP
@@ -16,8 +16,8 @@ services:
     environment:
       - PORT=80
 
-    # macvlan gives the container its own LAN IP, so you typically do NOT publish ports.
-    # For macvlan, leave `ports:` commented out.
+    # macvlan gives the container its own LAN IP, so you do not publish port mappings.
+    # For macvlan, leave `ports:` commented out. It defaults to 80 like any other web server.
 
     # --- BRIDGE MODE (optional) ---
     # To run on normal Docker bridge networking with a mapped port:
@@ -26,9 +26,9 @@ services:
     #  3) Comment out (or delete) the `networks:` definition at the bottom
     #
     # Example mappings:
-    #   - "8080:80"      => browse http://HOST:8080/
+    #   - "8080:80"      => browse http://HOST:8080/   (host stays at 80 - this is what you want)
     #   - "80:80"        => browse http://HOST/        (bind container port 80)
-    #   - "52721:52721"  => browse http://HOST:52721/  (PSFree default port)
+    #   - "52721:52721"  => browse http://HOST:52721/  (changes bing and hst port - don't do this)
     #
     # ports:
     #   - "52721:80"

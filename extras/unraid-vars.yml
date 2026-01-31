@@ -53,13 +53,13 @@ overview: |
 config:
   - name: "Web HTTP Port"
     target: "PORT"
-    default: "52721"
+    default: "80"
     mode: "{3}"
     type: "Variable"
-    display: "always"
+    display: "advanced"
     required: true
     mask: false
-    description: "Web port for exploit host - should be 80"
+    description: "Exploit web host port - should be 80"
   - name: "WebUI Port (Unraid)"
     target: "80"
     default: "52721"
@@ -68,4 +68,4 @@ config:
     display: "always"
     required: false
     mask: false
-    description: "Port used by Unraid WebUI menu. Should match Web HTTP Port above."
+    description: "Port used by Unraid WebUI menu for Bridge type network."
