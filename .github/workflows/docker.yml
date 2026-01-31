@@ -72,12 +72,14 @@ jobs:
           rm -rf /tmp/unraid_templates
           git clone "https://x-access-token:${TEMPLATES_REPO_PAT}@github.com/${UNRAID_TEMPLATES_REPO}.git" /tmp/unraid_templates
 
-          # Copy in latest generated template (if present) and icon
-          cp -f unraid-template.xml /tmp/unraid_templates/unraid-template.xml 2>/dev/null || true
-          cp -f extras/icon.png /tmp/unraid_templates/icon.png 2>/dev/null || true
+          TEMPLATE_DIR="/tmp/unraid_templates/PSFree_Docker"
+          mkdir -p "$TEMPLATE_DIR"
+
+          install -m 0644 unraid-template.xml "$TEMPLATE_DIR/unraid-template.xml" 2>/dev/null || true
+          install -m 0644 extras/icon.png "$TEMPLATE_DIR/icon.png" 2>/dev/null || true
 
           cd /tmp/unraid_templates
-          git add unraid-template.xml icon.png
+          git add PSFree_Docker/
 
           if git diff --cached --quiet; then
             echo "No template changes to publish"
