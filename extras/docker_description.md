@@ -1,4 +1,4 @@
-# PSFree Web Host
+# **PSFree Web Host**
 
 This is a lightweight local web server for hosting the PSFree exploit with latest GoldHEN
 
@@ -31,4 +31,4 @@ Set the original "manuals.playstation.net" domain name to point to your containe
 
 #### **On your PS4:**
 
-Go to Settings → User Guide and the exploit loads automatically → Enjoy!
+Go to _Settings → User Guide_ and the exploit loads automatically → Enjoy!

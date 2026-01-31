@@ -15,7 +15,7 @@ ui:
   webui: "http://[IP]:[PORT]/"
   icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png"
 
-category: "Other:"
+category: "Network:Web Games:Tools"
 
 overview: |
   A lightweight local web server for hosting the PSFree exploit&#xD;
