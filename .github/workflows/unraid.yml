@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - develop
   release:
     types: [published]
   workflow_dispatch:
@@ -36,6 +35,20 @@ jobs:
           else
             echo "gen-unraid-template.py not found, skipping"
           fi
+
+      - name: Publish template to unraid_templates repo
+        if: github.ref_name == 'main' || github.event_name == 'release'
+        run: |
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/HVR88/unraid_templates.git
+          cd unraid_templates
+          mkdir -p PSFree_Docker
+          cp ../unraid-template.xml PSFree_Docker/unraid-template.xml
+          cp ../extras/icon.png PSFree_Docker/icon.png
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add PSFree_Docker
+          git diff --cached --quiet || git commit -m "Update PSFree_Docker Unraid template"
+          git push
 
       - name: Upload Unraid template artifact
         if: always()
