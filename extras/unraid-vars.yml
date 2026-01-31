@@ -12,7 +12,7 @@ runtime:
   privileged: false
 
 ui:
-  webui: "http://[IP]:[PORT]/"
+  webui: "http://[IP]:[80]/"
   icon: "https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png"
 
 category: "Network:Web Games:Tools"
@@ -68,4 +68,4 @@ config:
     display: "always"
     required: false
     mask: false
-    description: "Port used by Unraid WebUI button. Should match PORT env value above."
+    description: "Port used by Unraid WebUI menu. Should match Web HTTP Port above."
