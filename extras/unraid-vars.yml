@@ -54,6 +54,7 @@ config:
   - name: "HTTP Port"
     target: "PORT"
     default: "80"
+    Mode="{3}"
     type: "Variable"
     display: "always"
     required: true
