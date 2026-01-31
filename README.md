@@ -1,49 +1,66 @@
-# PSFree
-PSFree is a unstable and work in progress jailbreak multi firmware website for the PlayStation 4 and the PlayStation 5.
+# PSFree Web Host - Docker Deployment
 
-This repo is based on the work of two other repo :
-- [PSFree from Kame repo](https://github.com/kmeps4/PSFree) 
-- [PSFree from Al-Azif repo](https://github.com/Al-Azif/psfree-lapse)
+A lightweight local web server for hosting the PSFree exploit with latest GoldHEN
 
-<h1 style="color:red;text-align:center;">⚠️PLEASE DO NOT REPORT ERRORS FROM THIS REPO TO THEIR REPOS⚠️</h1>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/HVR88/PSFree_Docker/develop/extras/icon.png" alt="PSFree Web Host" />
+</p>
 
-<h2 style="color:red;text-align:center;">⚠️PLEASE TEST OTHER REPOS BEFORE OPENING A ISSUE ON THIS REPO⚠️</h2>
+PSFree_Docker is based on [PSFree from Nazky](https://github.com/Nazky/PSFree) - (this repo is mainly interesting for developers)
 
-___
+_Normal people want the **Docker Container**_ to exploit their PS4:
 
-### Know issues
-- Black screen on certain game.
-- Save corruption on certain game.
-- PS4 crash.
-- Some payloads not working correctly.
+> [!NOTE]
+>
+> ## **[espressomatic/psfree_docker](https://hub.docker.com/r/espressomatic/psfree_docker)**
+
+### Tweaks
+
+- _Pre-built container ready to deploy, hosted at Docker Hub and Unraid Apps_
+- **Updated to latest (Jan 2026) GoldHEN 2.4b18.8**
+- Multi-Architecture: amd64 and arm64 support
+- _Web server drops paths/text from URL - "Just Works" on PS4_
+- _Updated to allow running default http port 80_
+- Automatic build action pushes container to Docker hub
+- Build versioning for repo and docker container
+- Docker compose with instructions and exmaple defaults
+- Unraid template for manual installation and deployment to Unraid Community Apps
+- Unraid Docker 'app' icon
 
 ### Currently working firmware
 
-This repo only support PS4 for now.
+PS4 7.0 - 9.6
 
+## Dev Requirements to fork this repo
 
-| Console | Firmware |
-|:------ |:----------|
-| PS4 | 7.00 - 9.60 |
+You need to configure the following two secrets in your GitHub account to automatically push your build to Docker Hub
 
+- DOCKERHUB_USERNAME (this is your normal Docker Hub login username)
+- DOCKERHUB_TOKEN (you need to generater this at Docker Hub)
 
-# How to run
+# Docker Container Instructions (go to Docker Hub)
 
-## Website
-[Click Here](https://nazky.github.io/PSFree/)
+Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should ideally support macvlan or IPVLAN networking
 
-## Locally
+#### **Container Settings:**
 
-You need python !
+1. select/set your macvlan network (br0 on Unraid)
+2. set an available FIXED IP address within your lan
+3. set HTTP port to 80
 
-### Python
-##### Linux:
-Just start the 'start_server.sh'.
+This allows a simple redirect without a reverse proxy
 
-###### Command:
-```bash
-sudo chmod start_server.sh
-./start_server.sh
-```
-##### Windows:
-Just start (double-click) the start_server.bat.
+> [!NOTE]
+>
+> ## **[Download the complete container on Docker Hub](https://hub.docker.com/r/espressomatic/psfree_docker)**
+
+#### **Additional Setup:**
+
+Set the "manuals.playstation.net" domain name to point to your container's IP address
+
+- AdGuard Home / Pi-hole: DNS rewrite → container IP
+- Firewall / Router (pfSense / OPNsense / ASUS etc..): DNS Host override<br>([Host redirect on common routers](https://shorturl.at/Syx8T))
+
+#### **On your PS4:**
+
+Go to _Settings → User Guide_ and the exploit loads automatically → Enjoy!

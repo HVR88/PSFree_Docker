@@ -1,0 +1,19 @@
+# secrets
+*.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# archives / scratch
+archive/
+
+# macOS
+.DS_Store
+
+# local git hooks / vscode guardrails (local-only)
+.code/git-hooks/
+.vscode/settings.json
+release-main.sh
