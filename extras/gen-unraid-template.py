@@ -169,6 +169,7 @@ def main() -> int:
         cname = c.get("name", "")
         target = c.get("target", "")
         default = c.get("default", "")
+        mode = c.get("mode", "")
         ctype = c.get("type", "")
         display = c.get("display", "")
         required = bool_text(c.get("required", False))
@@ -178,9 +179,11 @@ def main() -> int:
         if not cname or not target or not ctype:
             die("extras/unraid-vars.yml: config item missing name/target/type")
 
-        # Match your exact Config formatting (self-closing with attributes)
+        # Conditionally include Mode attribute if provided
+        mode_attr = f' Mode="{mode}"' if has_value(mode) else ""
+
         lines.append(
-            f'  <Config Name="{cname}" Target="{target}" Default="{default}" '
+            f'  <Config Name="{cname}" Target="{target}" Default="{default}"{mode_attr} '
             f'Type="{ctype}" Display="{display}" Required="{required}" Mask="{mask}" '
             f'Description="{desc}" />'
         )

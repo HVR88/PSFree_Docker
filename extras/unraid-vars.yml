@@ -51,7 +51,7 @@ overview: |
   &#xA0;&#xA0;Go to Settings &#x2192; User Guide and the exploit loads automatically &#x2192; Enjoy!
 
 config:
-  - name: "HTTP Port"
+  - name: "Web HTTP Port"
     target: "PORT"
     default: "80"
     Mode="{3}"
@@ -59,4 +59,4 @@ config:
     display: "always"
     required: true
     mask: false
-    description: "HTTP port exposed by container (sets PORT env)"
+    description: "Web port for exploit host - should be 80)"
