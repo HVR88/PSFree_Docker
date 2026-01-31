@@ -44,6 +44,15 @@ def bool_text(v) -> str:
     return "true" if bool(v) else "false"
 
 
+# Helper: True if value is not None and not blank string
+def has_value(v) -> bool:
+    if v is None:
+        return False
+    if isinstance(v, str):
+        return v.strip() != ""
+    return True
+
+
 def xml_tag(name: str, value: str | None = None, indent: int = 2) -> str:
     pad = " " * indent
     if value is None:
@@ -64,7 +73,26 @@ def main() -> int:
 
     webui = get(data, "ui", "webui")
     icon = get(data, "ui", "icon")
+    template_url = get(data, "ui", "template_url")
+
     category = get(data, "category", default="")
+
+    support = get(data, "links", "support")
+    project = get(data, "links", "project")
+    more_info = get(data, "links", "more_info")
+
+    myip = get(data, "runtime", "myip")
+
+    extra_params = get(data, "runtime", "extra_params")
+    post_args = get(data, "runtime", "post_args")
+    cpuset = get(data, "runtime", "cpuset")
+
+    donate_text = get(data, "links", "donate_text")
+    donate_link = get(data, "links", "donate_link")
+
+    requires = get(data, "requires")
+
+    tailscale_state_dir = get(data, "runtime", "tailscale_state_dir")
 
     overview = get(data, "overview", default="")
 
@@ -88,16 +116,23 @@ def main() -> int:
     lines.append('<Container version="2">')
     lines.append(xml_tag("Name", str(name)))
     lines.append(xml_tag("Repository", repository_full))
-    lines.append(xml_tag("Registry", str(registry) if registry else ""))
+    if has_value(registry):
+        lines.append(xml_tag("Registry", str(registry)))
 
-    lines.append(xml_tag("Network", str(network) if network else "bridge"))
-    lines.append(xml_tag("MyIP", None))
+    lines.append(xml_tag("Network", str(network) if has_value(network) else "bridge"))
+    if has_value(myip):
+        lines.append(xml_tag("MyIP", str(myip)))
     lines.append(xml_tag("Shell", str(shell)))
     lines.append(xml_tag("Privileged", bool_text(privileged)))
 
-    lines.append(xml_tag("Category", str(category) if category else None))
-    lines.append(xml_tag("Support", None))
-    lines.append(xml_tag("Project", None))
+    if has_value(category):
+        lines.append(xml_tag("Category", str(category)))
+    if has_value(support):
+        lines.append(xml_tag("Support", str(support)))
+    if has_value(project):
+        lines.append(xml_tag("Project", str(project)))
+    if has_value(more_info):
+        lines.append(xml_tag("MoreInfo", str(more_info)))
 
     # Overview block: preserve exactly, including &#xD; etc.
     lines.append("  <Overview>")
@@ -108,15 +143,23 @@ def main() -> int:
     lines.append("  </Overview>")
 
     lines.append(xml_tag("WebUI", str(webui)))
-    lines.append(xml_tag("TemplateURL", None))
-    lines.append(xml_tag("Icon", str(icon) if icon else ""))
+    if has_value(template_url):
+        lines.append(xml_tag("TemplateURL", str(template_url)))
+    if has_value(icon):
+        lines.append(xml_tag("Icon", str(icon)))
 
-    lines.append(xml_tag("ExtraParams", None))
-    lines.append(xml_tag("PostArgs", None))
-    lines.append(xml_tag("CPUset", None))
-    lines.append(xml_tag("DonateText", None))
-    lines.append(xml_tag("DonateLink", None))
-    lines.append(xml_tag("Requires", None))
+    if has_value(extra_params):
+        lines.append(xml_tag("ExtraParams", str(extra_params)))
+    if has_value(post_args):
+        lines.append(xml_tag("PostArgs", str(post_args)))
+    if has_value(cpuset):
+        lines.append(xml_tag("CPUset", str(cpuset)))
+    if has_value(donate_text):
+        lines.append(xml_tag("DonateText", str(donate_text)))
+    if has_value(donate_link):
+        lines.append(xml_tag("DonateLink", str(donate_link)))
+    if has_value(requires):
+        lines.append(xml_tag("Requires", str(requires), indent=2))
 
     # Config entries
     for c in config_items:
@@ -142,7 +185,8 @@ def main() -> int:
             f'Description="{desc}" />'
         )
 
-    lines.append(xml_tag("TailscaleStateDir", None))
+    if has_value(tailscale_state_dir):
+        lines.append(xml_tag("TailscaleStateDir", str(tailscale_state_dir)))
     lines.append("</Container>")
     lines.append("")  # newline at EOF
 

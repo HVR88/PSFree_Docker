@@ -32,7 +32,7 @@ _Normal people want the **Docker Container:**_
 
 PS4 7.0 - 9.6 (maybe others but I only run on 9.0)
 
-## Dev Requirements for this repo
+## Dev Requirements to fork this repo
 
 You need to configure the following two secrets in your GitHub account to automatically push your build to Docker Hub
 
