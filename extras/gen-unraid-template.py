@@ -81,7 +81,9 @@ def main() -> int:
     support = get(data, "links", "support") or get(data, "support")
     project = get(data, "links", "project") or get(data, "project")
 
-    myip = get(data, "runtime", "myip")
+    # If true, emit <MyIP/> so Unraid can substitute [IP] in WebUI.
+    # If false/blank/missing, omit the tag entirely.
+    myip = get(data, "runtime", "myip", default=False)
 
     extra_params = get(data, "runtime", "extra_params")
     post_args = get(data, "runtime", "post_args")
@@ -122,8 +124,19 @@ def main() -> int:
         lines.append(xml_tag("Registry", str(registry)))
 
     lines.append(xml_tag("Network", str(network) if has_value(network) else "bridge"))
-    if has_value(myip):
-        lines.append(xml_tag("MyIP", str(myip)))
+
+    # Emit empty <MyIP/> only when enabled
+    myip_enabled = False
+    if isinstance(myip, bool):
+        myip_enabled = myip
+    elif isinstance(myip, str):
+        myip_enabled = myip.strip().lower() in ("true", "yes", "1", "on")
+    else:
+        myip_enabled = bool(myip)
+
+    if myip_enabled:
+        lines.append(xml_tag("MyIP"))
+
     lines.append(xml_tag("Shell", str(shell)))
     lines.append(xml_tag("Privileged", bool_text(privileged)))
 

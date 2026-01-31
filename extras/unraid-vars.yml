@@ -28,7 +28,7 @@ donate_link: ""
 requires: ""
 
 # Optional runtime extras (leave empty; generator will omit from XML when empty)
-myip: ""
+myip: true
 extra_params: ""
 post_args: ""
 cpuset: ""
@@ -53,10 +53,19 @@ overview: |
 config:
   - name: "Web HTTP Port"
     target: "PORT"
-    default: "80"
+    default: "52721"
     mode: "{3}"
     type: "Variable"
     display: "always"
     required: true
     mask: false
     description: "Web port for exploit host - should be 80"
+  - name: "WebUI Port (Unraid)"
+    target: "PORT"
+    default: "52721"
+    mode: "tcp"
+    type: "Port"
+    display: "always"
+    required: false
+    mask: false
+    description: "Port used by Unraid WebUI button. Should match PORT env value above."
