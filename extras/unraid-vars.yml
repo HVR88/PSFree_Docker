@@ -61,7 +61,7 @@ config:
     mask: false
     description: "Web port for exploit host - should be 80"
   - name: "WebUI Port (Unraid)"
-    target: "52721"
+    target: "80"
     default: "52721"
     mode: "tcp"
     type: "Port"
