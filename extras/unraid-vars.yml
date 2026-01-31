@@ -19,7 +19,7 @@ category: "Network:Web Games:Tools"
 
 # Links shown in Unraid container menu
 project: "https://hub.docker.com/r/espressomatic/psfree_docker"
-support: "https://forums.unraid.net/topic/XXXXX-psfree-web-host/"
+support: "https://forums.unraid.net/topic/196902-support-psfree-web-host/"
 
 # Optional template metadata (leave empty; generator will omit from XML when empty)
 template_url: ""
