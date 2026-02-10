@@ -1,4 +1,4 @@
-# PSFree Web Host - Docker Deployment
+# **PSFree Web Host - Docker Deployment**
 
 A lightweight web server + the latest GoldHEN for PS4 firmware 7.0 - 9.6
 
@@ -15,16 +15,19 @@ _PSFree_Docker is based on [PSFree from Nazky](https://github.com/Nazky/PSFree)_
 - Multi-Architecture: amd64 and arm64 support
 - _Web server drops paths/text from URL - "Just Works" on PS4_
 - _Updated to allow running default http port 80_
-
-<br>
+- No reverse proxy needed
 
 # Quick Start
 
-Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should ideally support macvlan or IPVLAN networking
+Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should ideally support MACVLAN or IPVLAN networking
+
+```
+git clone https://github.com/HVR88/PSFree_Docker
+```
 
 #### **Edit `.env` to match your network and IP settings:**
 
-1. Set your macvlan network (br0 on Unraid)
+1. Set your MACVLAN network (br0 on Unraid)
 2. Set an available FIXED IP address within your LAN
 3. Set HTTP port to 80
 4. Run:
@@ -32,8 +35,6 @@ Deploy with docker-compose, Portainer, Unraid, etc… Your Docker host should id
 ```bash
 docker compose up -d
 ```
-
-This allows a simple redirect without a reverse proxy
 
 #### **Additional Setup:**
 
@@ -50,7 +51,7 @@ Go to _Settings → User Guide_ and the exploit loads automatically → Enjoy!
 
 - Default image: `espressomatic/psfree_docker:latest`
 - Data volume: `./data` is mapped into `/PSFree` inside the container
-- For macvlan mode, keep `ports:` commented out and set a LAN IP
+- For MACVLAN mode, keep `ports:` commented out and set a LAN IP
 - For bridge mode, uncomment `ports:` and remove the `networks:` section
 - For bridge mode, set `HOST_PORT` in `.env` to the host-side port you want
 - Project source code & build workflows: https://github.com/HVR88/PSFree_DEV
