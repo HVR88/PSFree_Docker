@@ -1,0 +1,58 @@
+services:
+  psfree:
+    image: ${PSFREE_IMAGE:-espressomatic/psfree_docker:latest}
+    container_name: psfree
+
+    # Internal container listen port.
+    # IMPORTANT (bridge mode):
+    #   This MUST match the *container-side* port used in `ports:` below.
+    #   Example (default for bridge) ports: "52721:80" -> PORT must be 80
+    #   Example: ports: "8080:80"  -> PORT must be 80
+    #   Example: ports: "52721:52721" -> PORT must be 52721 - don't do this
+    #
+    # macvlan mode:
+    #   This is the port clients connect to directly on the container IP
+    #   (commonly 80 for easy redirects).
+    environment:
+      - PORT=${PSFREE_PORT:-80}
+
+    # macvlan gives the container its own LAN IP, so you do not publish port mappings.
+    # For macvlan, leave `ports:` commented out. It defaults to 80 like any other web server.
+
+    # --- BRIDGE MODE (optional) ---
+    # To run on normal Docker bridge networking with a mapped port:
+    #  1) Uncomment `ports:` below
+    #  2) Comment out the `networks:` section for macvlan (below)
+    #  3) Comment out (or delete) the `networks:` definition at the bottom
+    #
+    # Example mappings:
+    #   - "8080:80"      => browse http://HOST:8080/   (host stays at 80 - this is what you want)
+    #   - "80:80"        => browse http://HOST/        (bind container port 80)
+    #   - "52721:52721"  => browse http://HOST:52721/  (changes bind and host port - don't do this)
+    #
+    # ports:
+    #   - "${HOST_PORT:-8080}:${PSFREE_PORT:-80}"
+
+    restart: unless-stopped
+
+    # Optional: persist generated/modified files (manifest, updates, etc.)
+    # NOTE: This maps a host folder into the container. Adjust to your preference.
+    volumes:
+      - ${PSFREE_DATA_DIR:-./data}:/PSFree
+
+    # --- MACVLAN MODE (default) ---
+    networks:
+      macvlan_net:
+        ipv4_address: ${PSFREE_IP:-192.168.1.50} # CHANGE: set an unused IP on your LAN
+
+  # --- MACVLAN NETWORK (default) ---
+# If you switch to BRIDGE mode above, comment out or delete everything below.
+networks:
+  macvlan_net:
+    driver: macvlan
+    driver_opts:
+      parent: ${MACVLAN_PARENT:-eth0} # CHANGE: your physical NIC (e.g. eth0, eno1, enp3s0)
+    ipam:
+      config:
+        - subnet: ${LAN_SUBNET:-192.168.1.0/24} # CHANGE: your LAN subnet
+          gateway: ${LAN_GATEWAY:-192.168.1.1} # CHANGE: your LAN gateway
